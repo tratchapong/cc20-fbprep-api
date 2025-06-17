@@ -14,7 +14,7 @@ POST http://localhost:8899/api/post HTTP/1.1
 content-type: application/json
 
 {
-    "message": "sample message",
+    "message": "sample message"
 }
 ###
 
