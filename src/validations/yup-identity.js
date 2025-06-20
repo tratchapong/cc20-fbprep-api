@@ -19,18 +19,19 @@ const registerSchema = object({
   let result = emailRegex.test(identity) ? { email: identity } : { mobile: identity }
   return { ...rest, ...result, identity }
 })
-
+console.log(registerSchema)
 let data = {
   firstName: 'andy',
   lastName: 'codecamp',
-  // identity : 'andy@cc20.th',
-  identity: '1234567890',
+  identity : 'andy@cc20.th',
+  // identity: '1234567890',
   password: '123456',
   confirmPassword: '123456',
 }
 
 registerSchema.validate(data, { abortEarly: false })
   .then(rs => {
+    delete rs.identity
     console.log('PASS with : ', rs)
   }).catch(err => {
     for (let e of err.inner) {

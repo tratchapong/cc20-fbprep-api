@@ -4,8 +4,9 @@ import createError from "../utils/create-error.util.js"
 import checkIdentityKey from "../utils/identity-key.util.js"
 
 
-export async function register(req, res) {
-  const { identity, firstName, lastName, password, confirmPassword } = req.body
+export async function register(req, res, next) {
+  try {
+      const { identity, firstName, lastName, password, confirmPassword } = req.body
     // validation
 		if (!(identity.trim() && firstName.trim() && lastName.trim() && password.trim() && confirmPassword.trim())) {
 			createError(400, 'Please fill all data')
@@ -32,6 +33,36 @@ export async function register(req, res) {
     // สร้าง new user ใน database 
 		const result = await prisma.user.create({ data: newUser })
 		res.json({ msg: `Register successful`, result })
+  }catch(err) {
+    next(err)
+  }
+}
+export async function registerYup(req, res, next) {
+  try {
+  console.log(req.body)
+  const { identity,email, mobile, firstName, lastName, password } = req.body
+
+    // หาว่ามี user นี้แล้วหรือยัง
+    const identityKey = email ? "email" : "mobile"
+		const findIdentity = await prisma.user.findUnique({
+			where: { [identityKey]: identity }
+		})
+    if (findIdentity) {
+			createError(409, `Already have this user : ${identity}`)
+		}
+    // เตรียมข้อมูล new user + hash password
+		const newUser = {
+			[identityKey]: identity,
+			password: await bcrypt.hash(password, 10),
+			firstName: firstName,
+			lastName: lastName
+		}
+    // สร้าง new user ใน database 
+		const result = await prisma.user.create({ data: newUser })
+		res.json({ msg: `Register successful`, result })
+  }catch(err){
+    next(err)
+  }
 }
 
 export function login(req,res) {

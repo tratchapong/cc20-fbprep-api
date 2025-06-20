@@ -7,8 +7,8 @@ POST http://localhost:8899/api/auth/register HTTP/1.1
 content-type: application/json
 
 {
-  "identity" : "user01@cc20.th",
-  "firstName" : "user01",
+  "identity" : "user02@cc20.th",
+  "firstName" : "user02",
   "lastName" : "codecamp",
   "password" : "123456",
   "confirmPassword" : "123456"
