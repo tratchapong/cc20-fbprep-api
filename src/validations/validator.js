@@ -9,18 +9,31 @@ export const registerSchema = object({
   lastName: string().required(),
   identity: string()
     .test('Identity check',
-      'Invalid Email or Mobile phone',
+      'Identity must be a valid email or mobile number',
       value => {
+        if(!value) { return true }
         return emailRegex.test(value) || mobileRegex.test(value)
       }),
   password: string().min(4).required(),
   confirmPassword: string().oneOf([ref("password")], `confirmPassword must match password`),
   email: string().email(),
-  mobile: string().matches(mobileRegex)
+  mobile: string().matches(mobileRegex, `invalid mobile phone`)
 }).noUnknown()
 .transform((value) => {
+  if(value.email || value.mobile) {
+    delete value.identity 
+    return value
+  }
+  // if have no both email, mobile then transform identity to email or mobile
   return ({ ...value, [emailRegex.test(value.identity) ? 'email' : 'mobile'] : value.identity })
 })
+.test(
+  'require-identity-or-email-or-mobile',
+  'At least one of identity, email, or mobile must be provided',
+  value => {
+    return !!(value.identity || value.email || value.mobile);
+  }
+)
 
 export function validate(schema, options = {}) {
   return async function (req, res, next) {
