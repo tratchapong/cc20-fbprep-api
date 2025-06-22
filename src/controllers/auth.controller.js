@@ -39,10 +39,8 @@ export async function register(req, res, next) {
   }
 }
 export async function registerYup(req, res, next) {
-  try {
     // console.log(req.body)
     const { email, mobile, firstName, lastName, password } = req.body
-
     // หาว่ามี user นี้แล้วหรือยัง
     if (email) {
       let foundUserEmail = await prisma.user.findUnique({
@@ -72,13 +70,9 @@ export async function registerYup(req, res, next) {
     const result = await prisma.user.create({ data: newUser })
     res.json({ msg: `Register successful`, result })
     // res.json({ msg: `Register successful`, newUser })
-  } catch (err) {
-    next(err)
   }
-}
 
 export async function login(req, res) {
-  try {
     // console.log(req.body)
     const { identity, password, email, mobile } = req.body
     const identityKey = email ? 'email' : 'mobile'
@@ -111,10 +105,7 @@ export async function login(req, res) {
       token: token,
       user: userData
     })
-  } catch (err) {
-    next(err)
   }
-}
 
 export const getMe = (req, res) => {
   res.json({ msg: 'GetMe controller' })
