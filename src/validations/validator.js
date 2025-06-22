@@ -18,7 +18,7 @@ export const registerSchema = object({
   confirmPassword: string().oneOf([ref("password")], `confirmPassword must match password`),
   email: string().email(),
   mobile: string().matches(mobileRegex, `invalid mobile phone`)
-}).noUnknown()
+})
 .transform((value) => {
   if(value.email || value.mobile) {
     delete value.identity 
@@ -33,7 +33,7 @@ export const registerSchema = object({
   value => {
     return !!(value.identity || value.email || value.mobile);
   }
-)
+).noUnknown()
 
 export function validate(schema, options = {}) {
   return async function (req, res, next) {
