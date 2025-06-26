@@ -1,6 +1,7 @@
 # Service api : test pattern
 
-GET http://localhost:8899/api/auth/me
+GET http://localhost:8899/api/auth/me HTTP/1.1
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MywiaWF0IjoxNzUwNjU4OTg0LCJleHAiOjE3NTE5NTQ5ODR9.07bxYHfaiXlksxy9TI3kwTVqyvuJaZIvzdggLt7sVlk
 ###
 # Register api
 POST http://localhost:8899/api/auth/register HTTP/1.1
